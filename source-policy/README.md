@@ -38,6 +38,7 @@
 - 一次情報と二次情報の使い分け
 - 例外条件の整理
 - Web 検索時の除外条件
+- 検索クエリ生成用スクリプトの利用
 
 ---
 
@@ -47,6 +48,13 @@
 > view .copilot\skills\source-policy\SKILL.md
 > "Qiita と Zenn を除外して、Spring Security の CSRF 設定を調べて"
 → 禁止ドメインを除外し、公式ドキュメントや信頼できる一次情報を優先して回答
+```
+
+### スクリプト実行例
+
+```bash
+> python .copilot\skills\source-policy\scripts\build_search_query.py "Spring Security CSRF"
+→ Spring Security CSRF -site:qiita.com -site:zenn.dev -site:note.com
 ```
 
 ---

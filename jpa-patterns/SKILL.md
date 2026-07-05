@@ -1,6 +1,6 @@
 ---
 name: jpa-patterns
-description: JPA/Hibernate のパターンと典型的な落とし穴（N+1、遅延ロード、トランザクション、クエリ）を扱います。JPA の性能問題、LazyInitializationException、エンティティ関連やフェッチ戦略の相談時に使います。
+description: JPA/Hibernate のパターンと典型的な落とし穴（N+1、遅延ロード、トランザクション、クエリ）を扱います。JPA の性能問題、LazyInitializationException、エンティティ関連やフェッチ戦略の相談、「レビューして」「PR を見て」「コード RV」などの依頼時に使います。
 ---
 
 # JPA Patterns スキル

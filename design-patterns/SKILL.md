@@ -1,6 +1,6 @@
 ---
 name: design-patterns
-description: Java の実例付きで代表的なデザインパターン（Factory、Builder、Strategy、Observer、Decorator など）を扱います。「パターンを実装したい」「Factory を使いたい」「Strategy パターンにしたい」、または拡張しやすいコンポーネントを設計するときに使います。
+description: Java の実例付きで代表的なデザインパターン（Factory、Builder、Strategy、Observer、Decorator など）を扱います。「パターンを実装したい」「Factory を使いたい」「Strategy パターンにしたい」「レビューして」「コード RV」などの依頼や、拡張しやすいコンポーネントを設計するときに使います。
 ---
 
 # Design Patterns スキル
