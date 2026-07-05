@@ -1,11 +1,11 @@
 ---
 name: agent-skills
-description: GitHub Copilot 向けの Agent Skill を新規作成・整理・改善するためのスキルです。「新しいスキルを作って」「SKILL.md を作って」「README を整えて」「レビューして」などの依頼時に、既存の skills フォルダ構成と記述スタイルを参考に、SKILL.md と README.md を一貫した形式で整えるために使います。
+description: GitHub Copilot がレビュー時に適切な skills を呼び出せているかを確認・調整するためのスキルです。「レビューして」「PR を見て」「コード RV」などの依頼時に、どのスキルが反応すべきか、description やサンプルコードが十分かを見直すときに使います。
 ---
 
 # Agent Skills スキル
 
-GitHub Copilot 向けの Agent Skill を、この `skills` 配下の既存スキルを参考にしながら追加・改善するためのスキルです。
+GitHub Copilot が **レビュー時に適切な skills を呼び出せるか** を確認し、発火条件やサンプルコードを調整するためのスキルです。
 
 ## 共通ポリシー
 
@@ -13,31 +13,53 @@ GitHub Copilot 向けの Agent Skill を、この `skills` 配下の既存スキ
 - Qiita・Zenn・note は情報源として使わず、公式ドキュメントや一次情報を優先する
 - 既存の `skills` 配下の構成・語調・粒度を優先してそろえる
 - Copilot の Agent Skills は **SKILL.md + 任意の補助リソース** で構成できる前提で設計する
+- コードレビュー時は、単一スキルだけでなく関連スキルまで連鎖して想起されるかを重視する
 
 ## 使うタイミング
 
-- 新しい Agent Skill を追加したいとき
-- 既存スキルの書式を統一したいとき
-- `SKILL.md` と `README.md` をセットで整備したいとき
-- skills 全体の命名やカテゴリ整理をしたいとき
+- 「レビューして」「PR を見て」「コード RV」で適切なスキルが反応するか確認したいとき
+- 特定のレビュー観点が呼ばれにくく、発火条件を見直したいとき
+- スキル読み込み確認用のサンプルコードを作りたいとき
+- skills 全体の description や発火語を調整したいとき
 
 ---
 
 ## Quick Start
 
-1. `skills` 配下の既存スキル構成を確認する
-2. 新しいスキルの責務と発火条件を定義する
-3. `SKILL.md` を front matter 付きで作成する
-4. 必要なら `README.md` と補助リソースを追加する
-5. ルート `README.md` の一覧へ反映する
+1. レビュー対象コードにどの観点を出したいか整理する
+2. 対応する skills の `description` に発火語が十分あるか確認する
+3. 必要ならサンプリングコードを作り、複数スキルが反応しやすい要素を入れる
+4. `java-code-review` から関連スキルへ観点を広げる導線があるか確認する
+5. 足りない発火語や説明を `SKILL.md` / `README.md` に反映する
 
 ---
 
-## 作成ルール
+## 調整ルール
 
-### 1. 構成をそろえる
+### 1. 発火対象を明確にする
 
-新しいスキルは次の構成を基本とする。
+レビュー依頼で何を呼びたいかを先に決める。
+
+- SQL 文字列連結、認証、入力検証 → `security-audit`
+- リソース管理、例外、null 安全性 → `java-code-review`
+- 命名、重複、長いメソッド → `clean-code`
+- 責務過多、依存関係、boolean 引数過多 → `solid-principles`
+- ループ内処理、不要な生成、性能懸念 → `performance-smell-detection`
+- JPA / Hibernate / N+1 → `jpa-patterns`
+
+### 2. サンプリングコードを作る
+
+複数スキルの発火を見たい場合は、1 ファイルに複数の観点を意図的に含める。
+
+- セキュリティ観点の欠陥
+- 可読性の低い命名
+- 責務過多のメソッド
+- リソースリーク
+- 性能上の懸念
+
+### 3. 構成をそろえる
+
+必要に応じて、確認用スキルや補助リソースも次の構成で整理する。
 
 ```text
 .copilot\skills\<skill-name>\
@@ -49,7 +71,7 @@ GitHub Copilot 向けの Agent Skill を、この `skills` 配下の既存スキ
   └─ assets\             # 任意
 ```
 
-### 2. SKILL.md に含める内容
+### 4. SKILL.md に含める内容
 
 - front matter
   - `name`
@@ -59,13 +81,13 @@ GitHub Copilot 向けの Agent Skill を、この `skills` 配下の既存スキ
 - 使うタイミング
 - 必要なら Quick Start、チェックリスト、原則、例、関連スキル
 
-`description` は発火判定に使われるため、**何をするスキルか**だけでなく、**どんな依頼で使うか**まで具体的に書く。
+`description` は発火判定に使われるため、**何をするスキルか**だけでなく、**「レビューして」「PR を見て」「コード RV」など、どんな依頼で使うか**まで具体的に書く。
 
 スクリプトを使う場合は、`SKILL.md` の本文に**実行するタイミング・コマンド・引数**を明記する。
 
 スキルが読み込まれると、そのディレクトリ内のファイルも参照対象になる前提で設計する。
 
-### 3. README.md に含める内容
+### 5. README.md に含める内容
 
 - スキル名
 - `SKILL.md` の読み込み場所
@@ -74,7 +96,7 @@ GitHub Copilot 向けの Agent Skill を、この `skills` 配下の既存スキ
 - 扱う内容
 - 関連スキル
 
-### 4. 補助リソースを活用する
+### 6. 補助リソースを活用する
 
 - `scripts/` - 自動化や変換に使う補助スクリプト
 - `references/` - 長めの設計資料や API 仕様
@@ -85,7 +107,7 @@ GitHub Copilot 向けの Agent Skill を、この `skills` 配下の既存スキ
 
 必要に応じて front matter に `allowed-tools` を追加できるが、`shell` / `bash` の事前承認は**完全に信頼できるスキルだけ**に限定する。
 
-### 5. 既存スキルを優先して参考にする
+### 7. 既存スキルを優先して参考にする
 
 - 構成例: `clean-code`, `design-patterns`, `java-code-review`
 - 共通ポリシー例: `source-policy`
@@ -102,15 +124,14 @@ GitHub Copilot 向けの Agent Skill を、この `skills` 配下の既存スキ
 
 ---
 
-## 追加手順
+## 確認手順
 
-1. 既存スキルと重複しないか確認する
-2. `skills\<skill-name>` フォルダを作成する
-3. `SKILL.md` を既存フォーマットに合わせて作成する
-4. 必要なら `scripts/` `references/` `examples/` `assets/` を追加する
-5. 必要なら `README.md` を作成する
-6. ルートの `README.md` に一覧を追加する
-7. 既存スキルとの関連があれば相互参照を追加する
+1. レビュー対象コードにどの欠陥を入れるか決める
+2. 対応する skills の `description` に発火語を入れる
+3. サンプルコードを作成する
+4. 必要なら `java-code-review` に関連スキルの併用ルールを追加する
+5. レビュー結果が期待した観点を含むか確認する
+6. 足りない場合は `description` やサンプルコードを再調整する
 
 ---
 
@@ -118,14 +139,12 @@ GitHub Copilot 向けの Agent Skill を、この `skills` 配下の既存スキ
 
 ```text
 依頼:
-「Agent Skills を作成して。参考にするのは skills」
+「この Java ファイルをレビューして」
 
 期待する動き:
-1. skills 配下の既存構成を確認する
-2. 新スキルの責務を定義する
-3. SKILL.md を作成する
-4. README.md を作成する
-5. ルート README に追加する
+1. コード中の要素から反応すべき skills を推定する
+2. `java-code-review` だけでなく関連スキル観点まで広げる
+3. 指摘がセキュリティ、可読性、設計、性能に分散して出る
 ```
 
 ---
@@ -133,5 +152,7 @@ GitHub Copilot 向けの Agent Skill を、この `skills` 配下の既存スキ
 ## 関連スキル
 
 - `source-policy` - 技術調査時の共通ポリシー
-- `clean-code` - 説明や構成の簡潔さ
-- `java-code-review` - チェックリスト形式の参考
+- `java-code-review` - レビューの基点
+- `clean-code` - 可読性と重複の観点
+- `solid-principles` - 設計観点
+- `security-audit` - セキュリティ観点

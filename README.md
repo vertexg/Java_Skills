@@ -67,7 +67,7 @@ When you need to build a filtered search query, run
 | スキル | 説明 |
 |-------|-------------|
 | [source-policy](source-policy/) | 技術調査時の情報源ポリシーと参照優先順位 |
-| [agent-skills](agent-skills/) | skills 配下を参考に Agent Skill を追加・整備するためのガイド |
+| [agent-skills](agent-skills/) | レビュー時に適切な skills が呼ばれるか確認・調整するためのガイド |
 
 ### コード品質
 | スキル | 説明 |
