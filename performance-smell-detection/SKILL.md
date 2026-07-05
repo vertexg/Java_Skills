@@ -1,6 +1,6 @@
 ---
 name: performance-smell-detection
-description: Java のコードレベルな性能スメル（Stream、コレクション、boxing、regex、オブジェクト生成など）を検出します。絶対的な正解ではなく、気づきを与えるためのスキルです。「性能を見て」「レビューして」「PR を見て」「コード RV」などの依頼時に使います。最適化前には必ず計測してください。JPA / DB 性能には jpa-patterns を使います。
+description: Java のコードレベルな性能スメル（Stream、コレクション、boxing、regex、オブジェクト生成など）を検出します。絶対的な正解ではなく、気づきを与えるためのスキルです。「性能を見て」「ホットパスを計測ベースで見て」「性能観点でレビューして」などの依頼時に使います。最適化前には必ず計測してください。JPA / DB 性能には jpa-patterns を使います。
 ---
 
 # Performance Smell Detection スキル
@@ -32,7 +32,7 @@ Java コードにある **潜在的な** 性能問題を見つけるためのス
 
 **このスキル:** コードレベルの性能（Stream、コレクション、オブジェクト）
 **DB 向け:** `jpa-patterns` を使用（N+1、遅延ロード、ページネーション）
-**アーキテクチャ向け:** `architecture-review` を使用
+**設計観点:** `solid-principles` と `java-code-review` を併用
 
 ---
 

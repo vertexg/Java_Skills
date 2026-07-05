@@ -51,7 +51,7 @@ Java コードにある **潜在的な** 性能スメルに気づけるよう支
 ## 対象外
 
 - **JPA / データベース** - `jpa-patterns` を使用
-- **アーキテクチャ** - `architecture-review` を使用
+- **アーキテクチャ** - `solid-principles` と `java-code-review` を併用
 - **JVM チューニング** - 対象外（GC、ヒープなど）
 
 ## 使用イメージ
@@ -68,8 +68,7 @@ Copilot: [潜在的なスメルを指摘]
 ## 関連スキル
 
 - `jpa-patterns` - DB 性能（N+1、ページネーション）
-- `java-code-review` - 一般的なコード品質
-- `concurrency-review` - スレッド安全性と非同期パターン
+- `java-code-review` - 一般的なコード品質（並行処理・スレッド安全性を含む）
 
 ## 参考資料
 

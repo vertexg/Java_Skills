@@ -1,6 +1,6 @@
 ---
 name: jpa-patterns
-description: JPA/Hibernate のパターンと典型的な落とし穴（N+1、遅延ロード、トランザクション、クエリ）を扱います。JPA の性能問題、LazyInitializationException、エンティティ関連やフェッチ戦略の相談、「レビューして」「PR を見て」「コード RV」などの依頼時に使います。
+description: JPA/Hibernate のパターンと典型的な落とし穴（N+1、遅延ロード、トランザクション、クエリ）を扱います。JPA の性能問題、LazyInitializationException、エンティティ関連やフェッチ戦略の相談、「JPA 観点でレビューして」「N+1 を見て」「フェッチ戦略を見て」などの依頼時に使います。
 ---
 
 # JPA Patterns スキル
@@ -657,6 +657,6 @@ When reviewing JPA code, check:
 
 ## Related Skills
 
-- `spring-boot-patterns` - Spring Boot controller/service patterns
 - `java-code-review` - General code review checklist
 - `clean-code` - Code quality principles
+- `performance-smell-detection` - Code-level performance smells

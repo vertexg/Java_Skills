@@ -1,6 +1,6 @@
 ---
 name: solid-principles
-description: Java 例付きの SOLID 原則チェックリストです。クラス設計のレビュー、リファクタリング、Single Responsibility / Open-Closed / Liskov / Interface Segregation / Dependency Inversion の相談、「レビューして」「PR を見て」「コード RV」などの依頼時に使います。
+description: Java 例付きの SOLID 原則チェックリストです。クラス設計のレビュー、リファクタリング、Single Responsibility / Open-Closed / Liskov / Interface Segregation / Dependency Inversion の相談、「SOLID 観点でレビューして」「責務分割を見て」「依存関係を見て」などの依頼時に使います。
 ---
 
 # SOLID Principles スキル

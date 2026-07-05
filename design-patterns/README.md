@@ -57,7 +57,7 @@ Java の実践例付きで代表的なデザインパターンを扱います。
 
 - `solid-principles` - パターンが支える設計原則
 - `clean-code` - コードレベルの実践
-- `spring-boot-patterns` - Spring での実装例
+- `jpa-patterns` - Spring/JPA でのデータアクセス実装
 
 ---
 

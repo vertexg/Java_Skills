@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: OWASP Top 10、入力検証、インジェクション対策、安全な実装をカバーする Java 向けセキュリティチェックリストです。Spring、Quarkus、Jakarta EE、素の Java で利用できます。「セキュリティレビューして」「この PR を見て」「コード RV」「脆弱性を見て」などの依頼、セキュリティレビュー、リリース前確認時に使います。
+description: OWASP Top 10、入力検証、インジェクション対策、安全な実装をカバーする Java 向けセキュリティチェックリストです。Spring、Quarkus、Jakarta EE、素の Java で利用できます。「セキュリティレビューして」「この PR をセキュリティ観点で見て」「脆弱性を見て」などの依頼、セキュリティレビュー、リリース前確認時に使います。
 ---
 
 # Security Audit スキル
@@ -557,5 +557,5 @@ log.debug("Request body: {}", requestWithCreditCard);  // NEVER!
 ## Related Skills
 
 - `java-code-review` - General code review
-- `maven-dependency-audit` - Dependency vulnerability scanning
-- `logging-patterns` - Secure logging practices
+- `jpa-patterns` - Safe query patterns (parameterized queries)
+- `source-policy` - Primary-source references for security research
