@@ -438,13 +438,16 @@ public class InventoryListener {
 
 @Component
 public class EmailListener {
-    @EventListener
-    public void handleOrderPlaced(OrderPlacedEvent event) {
-        // Send email
-    }
+    // Choose ONE style per event - registering both would handle the event twice
 
     @EventListener
-    @Async  // Async processing
+    public void handleOrderPlaced(OrderPlacedEvent event) {
+        // Send email (synchronous)
+    }
+
+    // Async variant (requires @EnableAsync on a @Configuration class)
+    @EventListener
+    @Async
     public void handleOrderPlacedAsync(OrderPlacedEvent event) {
         // Send email asynchronously
     }

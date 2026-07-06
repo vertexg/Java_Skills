@@ -21,7 +21,7 @@ Java プロジェクト向けの体系的なコードレビューチェックリ
 
 1. **ざっと確認** - 意図と対象範囲を把握する
 2. **チェックリスト確認** - 下の各カテゴリを順番に見る
-3. **要約** - 指摘を重大度順（Critical → Minor）で整理する
+3. **要約** - 指摘を重大度順（Critical → Low）で整理する
 
 ## 関連スキルの併用
 
@@ -43,11 +43,14 @@ Java プロジェクト向けの体系的なコードレビューチェックリ
 ### Critical
 - [Issue description + line reference + suggestion]
 
-### Improvements
-- [Suggestion + rationale]
+### High
+- [Bug likely / performance issue + line reference + suggestion]
 
-### Minor/Style
-- [Nitpicks, optional improvements]
+### Medium
+- [Code smell, maintainability issue + rationale]
+
+### Low
+- [Style, nitpicks, optional improvements]
 
 ### Good Practices Observed
 - [Positive feedback - important for morale]

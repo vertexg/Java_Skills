@@ -234,7 +234,7 @@ public class SecurityHeadersFilter implements Filter {
         response.setHeader("Content-Security-Policy", "default-src 'self'");
         response.setHeader("X-Content-Type-Options", "nosniff");
         response.setHeader("X-Frame-Options", "DENY");
-        response.setHeader("X-XSS-Protection", "1; mode=block");
+        response.setHeader("X-XSS-Protection", "0");  // Legacy filter is deprecated - disable it (OWASP recommendation)
         chain.doFilter(req, res);
     }
 }
@@ -253,14 +253,15 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            // For REST APIs with JWT (stateless) - can disable CSRF
-            .csrf(csrf -> csrf.disable())
+        // Choose ONE of the following (do not chain both):
 
-            // For browser apps with sessions - keep CSRF enabled
-            .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            );
+        // (a) For REST APIs with JWT (stateless) - can disable CSRF
+        http.csrf(csrf -> csrf.disable());
+
+        // (b) For browser apps with sessions - keep CSRF enabled
+        http.csrf(csrf -> csrf
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        );
         return http.build();
     }
 }
@@ -403,16 +404,15 @@ application-local.yml
 ObjectInputStream ois = new ObjectInputStream(untrustedInput);
 Object obj = ois.readObject();  // Remote Code Execution risk!
 
-// ✅ GOOD: Use JSON with Jackson
+// ✅ GOOD: Use JSON with Jackson (default typing is OFF by default - keep it off)
 ObjectMapper mapper = new ObjectMapper();
-// Disable dangerous features
-mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+User user = mapper.readValue(json, User.class);
+
+// ❌ DANGEROUS: Never enable default typing for untrusted input
 mapper.activateDefaultTyping(
     LaissezFaireSubTypeValidator.instance,
     ObjectMapper.DefaultTyping.NON_FINAL
-);  // Be careful with polymorphic types!
-
-User user = mapper.readValue(json, User.class);
+);  // Gadget-chain RCE risk (polymorphic deserialization)!
 ```
 
 ### Jackson Security
@@ -425,9 +425,6 @@ public class JacksonConfig {
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
-
-        // Prevent unknown properties exploitation
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         // Don't allow class type in JSON (prevents gadget attacks)
         mapper.deactivateDefaultTyping();
@@ -490,7 +487,7 @@ mvn versions:use-latest-releases
 | `X-Content-Type-Options` | `nosniff` | Prevent MIME sniffing |
 | `X-Frame-Options` | `DENY` | Prevent clickjacking |
 | `Strict-Transport-Security` | `max-age=31536000` | Force HTTPS |
-| `X-XSS-Protection` | `1; mode=block` | Legacy XSS filter |
+| `X-XSS-Protection` | `0` | Legacy XSS filter is deprecated - explicitly disable (OWASP) |
 
 ### Spring Boot Configuration
 
