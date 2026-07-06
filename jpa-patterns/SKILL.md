@@ -128,6 +128,9 @@ spring:
 logging:
   level:
     org.hibernate.SQL: DEBUG
+    # Bind parameters - Hibernate 6 (Spring Boot 3+)
+    org.hibernate.orm.jdbc.bind: TRACE
+    # Bind parameters - Hibernate 5
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 ```
 
@@ -276,18 +279,19 @@ public class OrderService {
     public void placeOrder(Order order) {
         orderRepository.save(order);
 
-        // REQUIRED (default): Uses existing or creates new
+        // processPayment runs in its own transaction (REQUIRES_NEW, see below)
+        // Catch its exception here if the order should be kept when payment fails;
+        // an uncaught exception rolls back this transaction (the order) too
         paymentService.processPayment(order);
-
-        // If paymentService throws, entire order is rolled back
     }
 }
 
 @Service
 public class PaymentService {
 
-    // REQUIRES_NEW: Always creates new transaction
-    // If this fails, order can still be saved
+    // REQUIRES_NEW: Suspends the caller's transaction and starts its own,
+    // which commits/rolls back independently. Note: the caller must catch
+    // the exception, or the caller's transaction is also rolled back
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void processPayment(Order order) {
         // Independent transaction
@@ -550,6 +554,10 @@ public class Order {
 ### Handling OptimisticLockException
 
 ```java
+// ⚠️ The version check runs at flush/commit time - AFTER the @Transactional
+// method returns. Catching inside the transactional method does NOT work:
+
+// ❌ BAD: catch never fires (exception is thrown on commit, outside the try)
 @Service
 public class OrderService {
 
@@ -560,19 +568,32 @@ public class OrderService {
             order.setStatus(request.getStatus());
             return orderRepository.save(order);
         } catch (OptimisticLockException e) {
-            throw new ConcurrentModificationException(
+            // Unreachable in practice - commit happens after this method
+            throw new ConcurrentModificationException("...");
+        }
+    }
+}
+
+// ✅ GOOD: catch outside the transaction boundary
+// (Spring wraps it as ObjectOptimisticLockingFailureException)
+@Service
+public class OrderFacade {
+    private final OrderService orderService;
+
+    public Order updateOrder(Long id, UpdateOrderRequest request) {
+        try {
+            return orderService.updateOrder(id, request);  // @Transactional method
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new ConflictException(
                 "Order was modified by another user. Please refresh and try again."
             );
         }
     }
 
-    // Or with retry
-    @Retryable(value = OptimisticLockException.class, maxAttempts = 3)
-    @Transactional
+    // Or with retry (requires spring-retry and @EnableRetry)
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 3)
     public Order updateOrderWithRetry(Long id, UpdateOrderRequest request) {
-        Order order = orderRepository.findById(id).orElseThrow();
-        order.setStatus(request.getStatus());
-        return orderRepository.save(order);
+        return orderService.updateOrder(id, request);
     }
 }
 ```
