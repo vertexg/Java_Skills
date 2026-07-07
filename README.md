@@ -88,6 +88,11 @@ When you need to build a filtered search query, run
 |-------|-------------|
 | [jpa-patterns](jpa-patterns/) | JPA/Hibernate パターン（N+1、遅延ロード、トランザクション） |
 
+### 動作確認用（スキルではない）
+| フォルダー | 説明 |
+|-------|-------------|
+| [skill-load-check](skill-load-check/) | スキル発火確認用の意図的な欠陥入りサンプルコード。`SKILL.md` を持たず、`agent-skills` での確認作業に使う |
+
 ## 新しいスキルを追加する
 
 ### 着手前の確認

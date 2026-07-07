@@ -57,6 +57,11 @@ GitHub Copilot が **レビュー時に適切な skills を呼び出せるか** 
 - リソースリーク
 - 性能上の懸念
 
+確認用サンプルはリポジトリ直下の `skill-load-check/` に置く。既存のサンプルを再利用・拡張してよい。
+
+- `TempReviewSample.java` - SQL 文字列連結、リソースリーク、ループ内クエリ（security-audit / java-code-review / performance-smell-detection 向け）
+- `TempSolidCleanSample.java` - 重複ロジック、boolean 引数過多、責務過多（clean-code / solid-principles 向け）
+
 ### 3. 構成をそろえる
 
 必要に応じて、確認用スキルや補助リソースも次の構成で整理する。

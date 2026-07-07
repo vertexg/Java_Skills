@@ -295,14 +295,15 @@ try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
 ```java
 // ✅ Structured concurrency for parallel I/O
-try (StructuredTaskScope.ShutdownOnFailure scope = new StructuredTaskScope.ShutdownOnFailure()) {
-    Future<User> user = scope.fork(() -> fetchUser(id));
-    Future<Orders> orders = scope.fork(() -> fetchOrders(id));
+// (Java 21+ preview API: fork() returns Subtask, not Future)
+try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    StructuredTaskScope.Subtask<User> user = scope.fork(() -> fetchUser(id));
+    StructuredTaskScope.Subtask<Orders> orders = scope.fork(() -> fetchOrders(id));
 
     scope.join();
     scope.throwIfFailed();
 
-    return new UserProfile(user.resultNow(), orders.resultNow());
+    return new UserProfile(user.get(), orders.get());
 }
 ```
 

@@ -24,7 +24,7 @@ Java プロジェクト向けの体系的なコードレビューチェックリ
 ```
 > view .copilot\skills\java-code-review\SKILL.md
 > "Review the changes in src/main/java/org/example/UserService.java"
-→ 指摘を重大度別（Critical → Minor）に整理して返す
+→ 指摘を重大度別（Critical → Low）に整理して返す
 ```
 
 ---
